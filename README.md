@@ -50,7 +50,7 @@ cd "D:\vinod laptop data\cpmp\backend"
 node server.js
 ```
 
-> 🚀 API running at **http://localhost:5000**
+> 🚀 API running at **https://cpmp.onrender.com**
 
 Email verification links are **printed to the console** during development (Ethereal SMTP — no real email needed).
 

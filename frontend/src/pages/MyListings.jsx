@@ -35,7 +35,7 @@ export default function MyListings() {
   };
 
   const getImg = (p) => {
-    try { const imgs = JSON.parse(p.images || '[]'); return imgs[0] ? `http://localhost:5000${imgs[0]}` : null; }
+    try { const imgs = JSON.parse(p.images || '[]'); return imgs[0] ? `https://cpmp.onrender.com${imgs[0]}` : null; }
     catch { return null; }
   };
 

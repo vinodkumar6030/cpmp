@@ -50,7 +50,7 @@ export default function Home() {
   const getImg = (product) => {
     try {
       const imgs = JSON.parse(product.images);
-      return imgs[0] ? `http://localhost:5000${imgs[0]}` : null;
+      return imgs[0] ? `https://cpmp.onrender.com${imgs[0]}` : null;
     } catch { return null; }
   };
 

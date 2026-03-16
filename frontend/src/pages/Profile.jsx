@@ -58,8 +58,8 @@ export default function Profile() {
     setPhotoFile(null);
   };
 
-  const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() || '?';
-  const photoSrc = photoPreview || (user?.profilePhoto ? `http://localhost:5000${user.profilePhoto}` : null);
+  const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?';
+  const photoSrc = photoPreview || (user?.profilePhoto ? `https://cpmp.onrender.com${user.profilePhoto}` : null);
 
   return (
     <div className="page-wrapper">

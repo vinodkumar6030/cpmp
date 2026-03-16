@@ -45,7 +45,7 @@ export default function ProductDetails() {
 
   const isMine = user?.id === product.sellerId;
   const seller = product.seller;
-  const sellerInitials = seller?.name?.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() || '?';
+  const sellerInitials = seller?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?';
 
   return (
     <div className="page-wrapper">
@@ -58,14 +58,14 @@ export default function ProductDetails() {
           <div className="product-images">
             <div className="product-main-img">
               {images[activeImg]
-                ? <img src={`http://localhost:5000${images[activeImg]}`} alt={product.title} />
+                ? <img src={`https://cpmp.onrender.com${images[activeImg]}`} alt={product.title} />
                 : <span style={{ fontSize: '4rem' }}>📦</span>
               }
             </div>
             {images.length > 1 && (
               <div className="product-thumbs">
                 {images.map((img, i) => (
-                  <img key={i} className={`product-thumb ${i === activeImg ? 'active' : ''}`} src={`http://localhost:5000${img}`} alt="" onClick={() => setActiveImg(i)} />
+                  <img key={i} className={`product-thumb ${i === activeImg ? 'active' : ''}`} src={`https://cpmp.onrender.com${img}`} alt="" onClick={() => setActiveImg(i)} />
                 ))}
               </div>
             )}
@@ -96,7 +96,7 @@ export default function ProductDetails() {
             <div className="seller-card">
               <div className="seller-avatar">
                 {seller?.profilePhoto
-                  ? <img src={`http://localhost:5000${seller.profilePhoto}`} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} alt="" />
+                  ? <img src={`https://cpmp.onrender.com${seller.profilePhoto}`} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} alt="" />
                   : sellerInitials
                 }
               </div>

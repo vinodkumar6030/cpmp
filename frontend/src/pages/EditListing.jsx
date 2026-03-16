@@ -67,7 +67,7 @@ export default function EditListing() {
               <div className="image-preview-grid">
                 {existingImages.map((src, i) => (
                   <div key={i} className="image-preview">
-                    <img src={`http://localhost:5000${src}`} alt="" />
+                    <img src={`https://cpmp.onrender.com${src}`} alt="" />
                   </div>
                 ))}
               </div>

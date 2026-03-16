@@ -97,11 +97,11 @@ export default function Messages() {
   const getConvImage = (conv) => {
     try {
       const imgs = JSON.parse(conv.product?.images || '[]');
-      return imgs[0] ? `http://localhost:5000${imgs[0]}` : null;
+      return imgs[0] ? `https://cpmp.onrender.com${imgs[0]}` : null;
     } catch { return null; }
   };
 
-  const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() || '?';
+  const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?';
 
   return (
     <div className="page-wrapper" style={{ paddingTop: '70px' }}>
