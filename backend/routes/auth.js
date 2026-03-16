@@ -14,25 +14,47 @@ const isCollegeEmail = (email) => {
 };
 
 // POST /api/auth/register
+// POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, department, year, phone } = req.body;
-    if (!name || !email || !password) return res.status(400).json({ message: 'Name, email and password are required' });
-    if (password.length < 8) return res.status(400).json({ message: 'Password must be at least 8 characters' });
+
+    if (!name || !email || !password)
+      return res.status(400).json({ message: 'Name, email and password are required' });
+
+    if (password.length < 8)
+      return res.status(400).json({ message: 'Password must be at least 8 characters' });
 
     const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) return res.status(409).json({ message: 'Email already registered' });
+
+    if (existing)
+      return res.status(409).json({ message: 'Email already registered' });
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const verifyToken = crypto.randomBytes(32).toString('hex');
 
     const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword, department, year, phone, verifyToken }
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        department,
+        year,
+        phone,
+        verifyToken
+      }
     });
 
-    await sendVerificationEmail(email, name, verifyToken);
+    // Send response immediately
+    res.status(201).json({
+      message: 'Registration successful! Verification email is being sent.'
+    });
 
-    res.status(201).json({ message: 'Registration successful! Check your email (or console in dev mode) to verify your account.' });
+    // Send email in background (does not block request)
+    sendVerificationEmail(email, name, verifyToken)
+      .then(() => console.log("Verification email sent"))
+      .catch(err => console.error("Email error:", err));
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Registration failed', error: err.message });
