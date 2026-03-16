@@ -30,7 +30,7 @@ export default function Signup() {
       if (err.response) {
         setError(err.response.data.message || 'Server error occurred');
       } else if (err.request) {
-        setError('Network error: Could not connect to backend server on port 5000.');
+        setError('Unable to connect to the server. Please try again.');
       } else {
         setError(err.message || 'Registration failed');
       }
