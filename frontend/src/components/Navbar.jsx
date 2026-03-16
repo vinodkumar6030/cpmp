@@ -18,7 +18,7 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() : '';
+  const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : '';
 
   return (
     <nav className="navbar">
@@ -50,7 +50,7 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(!menuOpen)}
                   style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))', border: 'none', width: 36, height: 36, borderRadius: '50%', cursor: 'pointer', color: '#fff', fontWeight: 700, fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
-                  {user.profilePhoto ? <img src={`http://localhost:5000${user.profilePhoto}`} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }} alt="" /> : initials}
+                  {user.profilePhoto ? <img src={`https://cpmp.onrender.com${user.profilePhoto}`} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }} alt="" /> : initials}
                 </button>
                 {menuOpen && (
                   <div style={{ position: 'absolute', right: 0, top: '110%', background: 'var(--bg-surface)', border: '1px solid var(--bg-glass-border)', borderRadius: 'var(--radius-md)', padding: '0.5rem', minWidth: 160, zIndex: 999, boxShadow: 'var(--shadow-lg)' }}>
