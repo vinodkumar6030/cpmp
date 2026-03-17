@@ -15,7 +15,7 @@ const sendVerificationEmail = async (to, name, token) => {
     const link = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
     await transporter.sendMail({
-      from: `"Campus Marketplace" <${process.env.SMTP_USER}>`,
+      from: `"Campus Marketplace" <campusmarketplaceverify@gmail.com>`,
       to,
       subject: "Verify your account",
       html: `
