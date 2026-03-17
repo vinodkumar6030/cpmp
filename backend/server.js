@@ -55,5 +55,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n🚀 Campus Marketplace API running on http://localhost:${PORT}`);
-  console.log(`📧 Email verification links will be logged to console (Ethereal SMTP)`);
+  console.log("📧 Email service: Resend active");
 });
