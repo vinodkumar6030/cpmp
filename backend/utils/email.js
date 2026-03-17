@@ -6,16 +6,16 @@ const sendVerificationEmail = async (to, name, token) => {
   const link = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
   try {
-    await resend.emails.send({
-      from: "Campus Marketplace <onboarding@resend.dev>",
+    const response = await resend.emails.send({
+      from: "onboarding@resend.dev",
       to,
       subject: "Verify your account",
       html: `<a href="${link}">Verify Email</a>`
     });
 
-    console.log("✅ Email sent");
+    console.log("EMAIL RESPONSE:", response);
   } catch (err) {
-    console.error("❌ Email error:", err);
+    console.error("EMAIL ERROR FULL:", err);
   }
 };
 
