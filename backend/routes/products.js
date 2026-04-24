@@ -3,6 +3,7 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const { authenticate } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { sendNewListingEmail } = require('../utils/email');
 
 const prisma = new PrismaClient();
 
@@ -59,8 +60,15 @@ router.post('/', authenticate, upload.array('images', 5), async (req, res) => {
         images: JSON.stringify(images), location,
         sellerId: req.user.id
       },
-      include: { seller: { select: { id: true, name: true, profilePhoto: true } } }
+      include: { seller: { select: { id: true, name: true, profilePhoto: true, email: true } } }
     });
+
+    // 📧 Notify seller by email (non-blocking)
+    if (product.seller?.email) {
+      sendNewListingEmail(product.seller.email, product.seller.name, product, product.id)
+        .catch(err => console.error('Email notification failed:', err.message));
+    }
+
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json({ message: 'Failed to create listing', error: err.message });

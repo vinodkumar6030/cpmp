@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import { useToast } from '../components/Toast';
 
 const CATEGORIES = ['Electronics', 'Books', 'Furniture', 'Cycles', 'Accessories', 'Others'];
 
 export default function CreateListing() {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [form, setForm] = useState({ title: '', description: '', price: '', category: '', condition: 'Used', location: '' });
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -42,6 +44,7 @@ export default function CreateListing() {
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       files.forEach(f => fd.append('images', f));
       const res = await api.post('/products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      addToast('🎉 Listing published! Check your email for confirmation.', 'success', 5000);
       navigate(`/products/${res.data.id}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create listing');

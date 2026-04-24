@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import api from '../api/axios';
+import WishlistButton from '../components/WishlistButton';
 
 const CATEGORIES = ['All', 'Electronics', 'Books', 'Furniture', 'Cycles', 'Accessories', 'Others'];
 const CONDITIONS = ['All', 'New', 'Used'];
@@ -120,7 +121,11 @@ export default function Home() {
             {products.map(p => {
               const img = getImg(p);
               return (
-                <div key={p.id} className="product-card" onClick={() => navigate(`/products/${p.id}`)}>
+                <div key={p.id} className="product-card" onClick={() => navigate(`/products/${p.id}`)} style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', zIndex: 2 }}>
+                  <WishlistButton productId={p.id} />
+                </div>
+
                   <div className="product-card-image">
                     {img ? <img src={img} alt={p.title} /> : CATEGORY_ICONS[p.category] || '📦'}
                   </div>
