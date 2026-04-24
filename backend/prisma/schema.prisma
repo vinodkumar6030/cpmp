@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -36,11 +37,11 @@ model User {
 model Product {
   id          Int       @id @default(autoincrement())
   title       String
-  description String    @db.Text
+  description String
   price       Float
   category    String
   condition   String    // "New" | "Used"
-  images      String    @db.Text // JSON array of image paths
+  images      String    // JSON array of image paths
   location    String?
   status      String    @default("active") // "active" | "sold"
   createdAt   DateTime  @default(now())
@@ -55,7 +56,7 @@ model Product {
 
 model Message {
   id          Int       @id @default(autoincrement())
-  text        String    @db.Text
+  text        String
   createdAt   DateTime  @default(now())
 
   sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
@@ -70,7 +71,7 @@ model Message {
 
 model Report {
   id          Int       @id @default(autoincrement())
-  reason      String    @db.Text
+  reason      String
   status      String    @default("pending") // "pending" | "resolved"
   createdAt   DateTime  @default(now())
 

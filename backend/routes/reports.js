@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const { getPrisma } = require('../utils/prisma');
 const { authenticate } = require('../middleware/auth');
-
-const prisma = new PrismaClient();
 
 // POST /api/reports
 router.post('/', authenticate, async (req, res) => {
@@ -11,7 +9,7 @@ router.post('/', authenticate, async (req, res) => {
     const { productId, reason } = req.body;
     if (!productId || !reason) return res.status(400).json({ message: 'Product ID and reason required' });
 
-    const report = await prisma.report.create({
+    const report = await getPrisma().report.create({
       data: { productId: parseInt(productId), reason, reportedBy: req.user.id }
     });
     res.status(201).json({ message: 'Report submitted successfully', report });

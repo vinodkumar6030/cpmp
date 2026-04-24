@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const { getPrisma } = require('../utils/prisma');
 const { authenticate } = require('../middleware/auth');
-
-const prisma = new PrismaClient();
 
 // GET /api/messages/conversations — all chat threads for current user
 router.get('/conversations', authenticate, async (req, res) => {
@@ -11,7 +9,7 @@ router.get('/conversations', authenticate, async (req, res) => {
     const userId = req.user.id;
     
     // Get all messages involving this user, grouped by product+otherUser
-    const messages = await prisma.message.findMany({
+    const messages = await getPrisma().message.findMany({
       where: { OR: [{ senderId: userId }, { receiverId: userId }] },
       include: {
         sender: { select: { id: true, name: true, profilePhoto: true } },
@@ -50,7 +48,7 @@ router.get('/:productId/:userId', authenticate, async (req, res) => {
     const otherUserId = parseInt(req.params.userId);
     const myId = req.user.id;
 
-    const messages = await prisma.message.findMany({
+    const messages = await getPrisma().message.findMany({
       where: {
         productId,
         OR: [
@@ -80,7 +78,7 @@ router.post('/:productId/:userId', authenticate, async (req, res) => {
     if (!text || !text.trim()) return res.status(400).json({ message: 'Message cannot be empty' });
     if (req.user.id === receiverId) return res.status(400).json({ message: 'Cannot message yourself' });
 
-    const message = await prisma.message.create({
+    const message = await getPrisma().message.create({
       data: { text: text.trim(), senderId: req.user.id, receiverId, productId },
       include: { sender: { select: { id: true, name: true, profilePhoto: true } } }
     });

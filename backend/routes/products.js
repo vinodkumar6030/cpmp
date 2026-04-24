@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const { getPrisma } = require('../utils/prisma');
 const { authenticate } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const { sendNewListingEmail } = require('../utils/email');
-
-const prisma = new PrismaClient();
 
 // GET /api/products?search=&category=&condition=&minPrice=&maxPrice=&sort=
 router.get('/', async (req, res) => {
@@ -15,8 +13,8 @@ router.get('/', async (req, res) => {
 
     if (search) {
       where.OR = [
-        { title: { contains: search } },
-        { description: { contains: search } }
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
       ];
     }
     if (category && category !== 'All') where.category = category;
@@ -32,7 +30,7 @@ router.get('/', async (req, res) => {
     else if (sort === 'price_desc') orderBy = { price: 'desc' };
     else if (sort === 'oldest') orderBy = { createdAt: 'asc' };
 
-    const products = await prisma.product.findMany({
+    const products = await getPrisma().product.findMany({
       where,
       orderBy,
       include: {
@@ -53,7 +51,7 @@ router.post('/', authenticate, upload.array('images', 5), async (req, res) => {
 
     const images = req.files ? req.files.map(f => `/uploads/products/${f.filename}`) : [];
 
-    const product = await prisma.product.create({
+    const product = await getPrisma().product.create({
       data: {
         title, description, price: parseFloat(price),
         category, condition: condition || 'Used',
@@ -78,7 +76,7 @@ router.post('/', authenticate, upload.array('images', 5), async (req, res) => {
 // GET /api/products/my — own listings
 router.get('/my', authenticate, async (req, res) => {
   try {
-    const products = await prisma.product.findMany({
+    const products = await getPrisma().product.findMany({
       where: { sellerId: req.user.id },
       orderBy: { createdAt: 'desc' }
     });
@@ -91,7 +89,7 @@ router.get('/my', authenticate, async (req, res) => {
 // GET /api/products/:id
 router.get('/:id', async (req, res) => {
   try {
-    const product = await prisma.product.findUnique({
+    const product = await getPrisma().product.findUnique({
       where: { id: parseInt(req.params.id) },
       include: {
         seller: { select: { id: true, name: true, profilePhoto: true, department: true, year: true, phone: true, email: true } }
@@ -107,7 +105,7 @@ router.get('/:id', async (req, res) => {
 // PUT /api/products/:id
 router.put('/:id', authenticate, upload.array('images', 5), async (req, res) => {
   try {
-    const product = await prisma.product.findUnique({ where: { id: parseInt(req.params.id) } });
+    const product = await getPrisma().product.findUnique({ where: { id: parseInt(req.params.id) } });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     if (product.sellerId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized' });
@@ -119,7 +117,7 @@ router.put('/:id', authenticate, upload.array('images', 5), async (req, res) => 
       images = req.files.map(f => `/uploads/products/${f.filename}`);
     }
 
-    const updated = await prisma.product.update({
+    const updated = await getPrisma().product.update({
       where: { id: parseInt(req.params.id) },
       data: { title, description, price: parseFloat(price), category, condition, location, images: JSON.stringify(images) }
     });
@@ -132,12 +130,12 @@ router.put('/:id', authenticate, upload.array('images', 5), async (req, res) => 
 // DELETE /api/products/:id
 router.delete('/:id', authenticate, async (req, res) => {
   try {
-    const product = await prisma.product.findUnique({ where: { id: parseInt(req.params.id) } });
+    const product = await getPrisma().product.findUnique({ where: { id: parseInt(req.params.id) } });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     if (product.sellerId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Not authorized' });
     }
-    await prisma.product.delete({ where: { id: parseInt(req.params.id) } });
+    await getPrisma().product.delete({ where: { id: parseInt(req.params.id) } });
     res.json({ message: 'Listing deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to delete listing' });
@@ -147,11 +145,11 @@ router.delete('/:id', authenticate, async (req, res) => {
 // PATCH /api/products/:id/sold
 router.patch('/:id/sold', authenticate, async (req, res) => {
   try {
-    const product = await prisma.product.findUnique({ where: { id: parseInt(req.params.id) } });
+    const product = await getPrisma().product.findUnique({ where: { id: parseInt(req.params.id) } });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     if (product.sellerId !== req.user.id) return res.status(403).json({ message: 'Not authorized' });
 
-    const updated = await prisma.product.update({
+    const updated = await getPrisma().product.update({
       where: { id: parseInt(req.params.id) },
       data: { status: product.status === 'sold' ? 'active' : 'sold' }
     });

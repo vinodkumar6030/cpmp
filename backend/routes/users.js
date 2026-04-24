@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const { getPrisma } = require('../utils/prisma');
 const { authenticate } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const path = require('path');
-
-const prisma = new PrismaClient();
 
 // GET /api/users/me
 router.get('/me', authenticate, async (req, res) => {
@@ -17,7 +15,7 @@ router.get('/me', authenticate, async (req, res) => {
 router.put('/me', authenticate, async (req, res) => {
   try {
     const { name, department, year, phone } = req.body;
-    const updated = await prisma.user.update({
+    const updated = await getPrisma().user.update({
       where: { id: req.user.id },
       data: { name, department, year, phone }
     });
@@ -33,7 +31,7 @@ router.post('/me/photo', authenticate, upload.single('profilePhoto'), async (req
   try {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
     const profilePhoto = `/uploads/profiles/${req.file.filename}`;
-    await prisma.user.update({ where: { id: req.user.id }, data: { profilePhoto } });
+    await getPrisma().user.update({ where: { id: req.user.id }, data: { profilePhoto } });
     res.json({ profilePhoto });
   } catch (err) {
     res.status(500).json({ message: 'Failed to upload photo' });
@@ -43,7 +41,7 @@ router.post('/me/photo', authenticate, upload.single('profilePhoto'), async (req
 // GET /api/users/:id/products — public: view a user's listings
 router.get('/:id/products', async (req, res) => {
   try {
-    const products = await prisma.product.findMany({
+    const products = await getPrisma().product.findMany({
       where: { sellerId: parseInt(req.params.id), status: 'active' },
       include: { seller: { select: { id: true, name: true, profilePhoto: true, department: true } } },
       orderBy: { createdAt: 'desc' }

@@ -3,10 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { PrismaClient } = require('@prisma/client');
+const { getPrisma } = require('../utils/prisma');
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/email');
-
-const prisma = new PrismaClient();
 
 const isCollegeEmail = (email) => {
   // Original check removed to allow all emails
@@ -25,7 +23,7 @@ router.post('/register', async (req, res) => {
     if (password.length < 8)
       return res.status(400).json({ message: 'Password must be at least 8 characters' });
 
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const existing = await getPrisma().user.findUnique({ where: { email } });
 
     if (existing)
       return res.status(409).json({ message: 'Email already registered' });
@@ -33,7 +31,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
     const verifyToken = crypto.randomBytes(32).toString('hex');
 
-    const user = await prisma.user.create({
+    const user = await getPrisma().user.create({
       data: {
         name,
         email,
@@ -67,10 +65,10 @@ router.get('/verify-email', async (req, res) => {
     const { token } = req.query;
     if (!token) return res.status(400).json({ message: 'Token missing' });
 
-    const user = await prisma.user.findFirst({ where: { verifyToken: token } });
+    const user = await getPrisma().user.findFirst({ where: { verifyToken: token } });
     if (!user) return res.status(400).json({ message: 'Invalid or expired verification token' });
 
-    await prisma.user.update({
+    await getPrisma().user.update({
       where: { id: user.id },
       data: { isVerified: true, verifyToken: null }
     });
@@ -87,7 +85,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await getPrisma().user.findUnique({ where: { email } });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     if (!user.isVerified) return res.status(403).json({ message: 'Please verify your email first' });
     if (user.isSuspended) return res.status(403).json({ message: 'Account suspended. Contact admin.' });
@@ -108,12 +106,12 @@ router.post('/login', async (req, res) => {
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await getPrisma().user.findUnique({ where: { email } });
     if (!user) return res.json({ message: 'If that email is registered, you will receive a reset link.' });
 
     const resetToken = crypto.randomBytes(32).toString('hex');
     const resetTokenExp = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-    await prisma.user.update({ where: { id: user.id }, data: { resetToken, resetTokenExp } });
+    await getPrisma().user.update({ where: { id: user.id }, data: { resetToken, resetTokenExp } });
 
     await sendPasswordResetEmail(email, user.name, resetToken);
     res.json({ message: 'If that email is registered, you will receive a reset link.' });
@@ -129,13 +127,13 @@ router.post('/reset-password', async (req, res) => {
     if (!token || !password) return res.status(400).json({ message: 'Token and new password required' });
     if (password.length < 8) return res.status(400).json({ message: 'Password must be at least 8 characters' });
 
-    const user = await prisma.user.findFirst({
+    const user = await getPrisma().user.findFirst({
       where: { resetToken: token, resetTokenExp: { gt: new Date() } }
     });
     if (!user) return res.status(400).json({ message: 'Invalid or expired reset token' });
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    await prisma.user.update({
+    await getPrisma().user.update({
       where: { id: user.id },
       data: { password: hashedPassword, resetToken: null, resetTokenExp: null }
     });
