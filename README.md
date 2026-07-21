@@ -55,13 +55,6 @@
 
 ---
 
-## 🎥 Demo Video
-
-> 📹 **[Click here to watch the demo video](#)** *(Upload your screen recording here)*
-
-<!-- To embed a video: Record screen → drag the .mp4 file into GitHub's README editor → replace the # link above with the generated GitHub URL -->
-
----
 
 ## ✨ Features
 
