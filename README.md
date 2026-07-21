@@ -1,81 +1,106 @@
-# Campus Marketplace 🏪
+<div align="center">
 
-A full-stack campus-only marketplace for buying and selling used products. Built with **React + Vite**, **Node.js/Express**, and **MySQL (Prisma ORM)**.
+# 🏪 Campus Marketplace
 
----
+### Buy and sell used items within your campus — safe, simple, and student-only.
 
-## 🚀 Getting Started
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_App-6d28d9?style=for-the-badge)](https://cpmp-five.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/vinodkumar6030/cpmp)
+[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?style=for-the-badge&logo=postgresql)](https://supabase.com/)
 
-### Prerequisites
-- **Node.js** v18+
-- **MySQL** server running locally
-
----
-
-## ⚙️ Step 1 — Configure the Database
-
-Open `backend/.env` and update the `DATABASE_URL` with **your** MySQL credentials:
-
-```
-DATABASE_URL="mysql://YOUR_USERNAME:YOUR_PASSWORD@localhost:3306/campus_marketplace"
-```
-
-**Example** (default MySQL root with no password):
-```
-DATABASE_URL="mysql://root:@localhost:3306/campus_marketplace"
-```
-
-> ✅ Make sure you have a MySQL database named `campus_marketplace`. Create it with:
-> ```sql
-> CREATE DATABASE campus_marketplace;
-> ```
+</div>
 
 ---
 
-## 📦 Step 2 — Run Database Migration
+## 📸 Screenshots
 
-```bash
-cd "D:\vinod laptop data\cpmp\backend"
-npx prisma migrate dev --name init
-```
-
-This creates all tables (Users, Products, Messages, Reports).
+### 🏠 Homepage — Browse & Filter Listings
+![Homepage](assets/screenshots/homepage.png)
 
 ---
 
-## ▶️ Step 3 — Start the Backend
-
-```bash
-cd "D:\vinod laptop data\cpmp\backend"
-node server.js
-```
-
-> 🚀 API running at **https://cpmp.onrender.com**
-
-Email verification links are **printed to the console** during development (Ethereal SMTP — no real email needed).
+### 🛒 Product Listings (Desktop & Mobile)
+![Product Listings](assets/screenshots/listings.png)
 
 ---
 
-## 💻 Step 4 — Start the Frontend
-
-Open a **new terminal**:
-
-```bash
-cd "D:\vinod laptop data\cpmp\frontend"
-npm run dev
-```
-
-> 🌐 App running at **http://localhost:5173**
+### 🔐 Authentication — Login & Register
+| Login | Register |
+|---|---|
+| ![Login](assets/screenshots/login.png) | ![Register](assets/screenshots/register.png) |
 
 ---
 
-## 🎓 Create First Admin User
+### 📧 Email Verification Flow
+| Step 1 — Check Your Email | Step 2 — Email Verified ✅ |
+|---|---|
+| ![Check Email](assets/screenshots/email_verify.png) | ![Email Verified](assets/screenshots/email_verified.png) |
 
-After registering normally, run this SQL to promote a user to admin:
+---
 
-```sql
-UPDATE User SET role = 'admin' WHERE email = 'your@email.edu';
-```
+### 📝 Create New Listing
+![Create Listing](assets/screenshots/create_listing.png)
+
+---
+
+### 💬 Buyer-Seller Chat (Desktop & Mobile)
+![Chat](assets/screenshots/chat.png)
+
+---
+
+### 📋 My Listings Dashboard
+![My Listings](assets/screenshots/my_listings.png)
+
+---
+
+### 🔍 Browse — Empty & Populated State
+| No Listings | With Listings |
+|---|---|
+| ![Empty State](assets/screenshots/browse_empty.png) | ![With Products](assets/screenshots/browse_products.png) |
+
+---
+
+## 🎥 Demo Video
+
+> 📹 **[Click here to watch the demo video](#)** *(Upload your screen recording here)*
+
+<!-- To embed a video: Record screen → drag the .mp4 file into GitHub's README editor → replace the # link above with the generated GitHub URL -->
+
+---
+
+## ✨ Features
+
+| Feature | Status |
+|---|:---:|
+| 🎓 College email registration (`.edu` / `.ac.in`) | ✅ |
+| 📧 Email verification flow | ✅ |
+| 🔑 JWT login / logout | ✅ |
+| 🔒 Forgot / reset password | ✅ |
+| 🛒 Product listings + image upload (up to 5 images) | ✅ |
+| 🔍 Search + filter by category, price, condition | ✅ |
+| 💬 Buyer-Seller real-time chat | ✅ |
+| 📋 My Listings dashboard | ✅ |
+| 🚩 Report a listing | ✅ |
+| 🛡️ Admin panel (users, products, reports) | ✅ |
+| 🔐 Protected routes (auth required) | ✅ |
+| 📱 Responsive design (mobile + desktop) | ✅ |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 18 + Vite, Axios, React Router |
+| **Backend** | Node.js, Express.js |
+| **Database** | PostgreSQL via Supabase |
+| **ORM** | Prisma |
+| **Auth** | JWT (JSON Web Tokens) |
+| **Email** | Nodemailer (Ethereal in dev) |
+| **File Upload** | Multer |
+| **Deployment** | Vercel (Frontend) + Render (Backend) |
 
 ---
 
@@ -87,33 +112,98 @@ cpmp/
 │   ├── prisma/schema.prisma    # DB schema
 │   ├── routes/                 # auth, users, products, messages, reports, admin
 │   ├── middleware/             # JWT auth, multer upload
-│   ├── utils/email.js          # Nodemailer (Ethereal)
-│   ├── uploads/                # Auto-created; stores images
-│   └── server.js              # Express entry point
+│   ├── utils/email.js          # Nodemailer
+│   ├── uploads/                # Stores product images
+│   └── server.js               # Express entry point
 └── frontend/
     └── src/
         ├── pages/              # All 11 page components
-        ├── components/         # Navbar
+        ├── components/         # Navbar, shared components
         ├── context/            # AuthContext (JWT)
-        ├── api/axios.js        # Pre-configured Axios
-        └── index.css           # Design system
+        ├── api/axios.js        # Pre-configured Axios instance
+        └── index.css           # Design system & global styles
 ```
 
 ---
 
-## 🔑 Features
+## 🚀 Getting Started (Local Setup)
 
-| Feature | Status |
+### Prerequisites
+- **Node.js** v18+
+- **PostgreSQL** (or use Supabase free tier)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/vinodkumar6030/cpmp.git
+cd cpmp
+```
+
+### 2. Configure Environment Variables
+
+Create `backend/.env`:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+JWT_SECRET="your_jwt_secret_key"
+```
+
+### 3. Run Database Migration
+
+```bash
+cd backend
+npx prisma migrate dev --name init
+```
+
+### 4. Start the Backend
+
+```bash
+cd backend
+node server.js
+# API running at http://localhost:5000
+```
+
+### 5. Start the Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+# App running at http://localhost:5173
+```
+
+---
+
+## 🔑 Admin Setup
+
+After registering normally, run this SQL to promote a user to admin:
+
+```sql
+UPDATE "User" SET role = 'admin' WHERE email = 'your@email.edu';
+```
+
+---
+
+## 🌐 Live Links
+
+| Service | URL |
 |---|---|
-| College email registration (.edu / .ac.in) | ✅ |
-| Email verification (console link in dev) | ✅ |
-| JWT login / logout | ✅ |
-| Forgot / reset password | ✅ |
-| Product listings + image upload | ✅ |
-| Search + filter by category, price, condition | ✅ |
-| Buyer-Seller chat (5-second polling) | ✅ |
-| My Listings dashboard | ✅ |
-| Report a listing | ✅ |
-| Admin panel (users, products, reports) | ✅ |
-| Protected routes (auth required) | ✅ |
-| Responsive design (mobile + desktop) | ✅ |
+| 🌐 Frontend (Vercel) | https://cpmp-five.vercel.app/ |
+| 🚀 Backend API (Render) | https://cpmp.onrender.com |
+| 💻 GitHub Repository | https://github.com/vinodkumar6030/cpmp |
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, please open an issue first.
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [Vinod Kumar](https://github.com/vinodkumar6030)**
+
+⭐ Star this repo if you find it useful!
+
+</div>
