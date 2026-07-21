@@ -55,13 +55,6 @@
 
 ---
 
-### 🔍 Browse — Empty & Populated State
-| No Listings | With Listings |
-|---|---|
-| ![Empty State](assets/screenshots/browse_empty.png) | ![With Products](assets/screenshots/browse_products.png) |
-
----
-
 ## 🎥 Demo Video
 
 > 📹 **[Click here to watch the demo video](#)** *(Upload your screen recording here)*
