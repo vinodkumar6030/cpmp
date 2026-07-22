@@ -14,6 +14,15 @@
 
 ---
 
+<div align="center">
+  <img src="https://github.com/vinodkumar6030.png" width="160" height="160" style="border-radius: 50%; border: 4px solid #667eea; padding: 4px;" alt="Vinod Kumar Profile Photo"/>
+  
+  ### 👨‍💻 Vinod Kumar
+  #### Full Stack Developer | India 🇮🇳
+</div>
+
+---
+
 ## 🧑‍💻 About Me
 
 ```python
