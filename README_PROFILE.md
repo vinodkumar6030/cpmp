@@ -25,6 +25,8 @@
 
 ## 🧑‍💻 About Me
 
+<img align="right" alt="Coding GIF" width="380" src="https://raw.githubusercontent.com/abhisheknaiidu/abhisheknaiidu/master/code.gif"/>
+
 ```python
 class VinodKumar:
     def __init__(self):
