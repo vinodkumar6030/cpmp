@@ -15,10 +15,16 @@
 ---
 
 <div align="center">
-  <img src="https://github.com/vinodkumar6030.png" width="160" height="160" style="border-radius: 50%; border: 4px solid #667eea; padding: 4px;" alt="Vinod Kumar Profile Photo"/>
-  
-  ### 👨‍💻 Vinod Kumar
-  #### Full Stack Developer | India 🇮🇳
+  <a href="https://github.com/vinodkumar6030">
+    <img src="https://github.com/vinodkumar6030.png?size=200" width="200" height="200" style="border-radius:50%;" alt="Vinod Kumar"/>
+  </a>
+
+  <h3>👨‍💻 Vinod Kumar Inakollu</h3>
+  <p><b>Full Stack Developer | India 🇮🇳</b></p>
+
+  <a href="https://github.com/vinodkumar6030">
+    <img src="https://img.shields.io/badge/Follow%20Me-%40vinodkumar6030-181717?style=for-the-badge&logo=github" />
+  </a>
 </div>
 
 ---
